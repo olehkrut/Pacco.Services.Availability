@@ -1,9 +1,11 @@
 ﻿using Convey;
 using Convey.CQRS.Queries;
 using Convey.Persistence.MongoDB;
+using Convey.WebApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pacco.Services.Availability.Core.Repositories;
+using Pacco.Services.Availability.Infrastructure.Exceptions;
 using Pacco.Services.Availability.Infrastructure.Mongo.Documents;
 using Pacco.Services.Availability.Infrastructure.Mongo.Repositories;
 using System;
@@ -17,6 +19,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.AddTransient<IResourcesRepository, ResourcesMongoRepository>();
 
             builder
+                .AddErrorHandler<ExceptionToResponseMapper>()
                 .AddQueryHandlers()
                 .AddInMemoryQueryDispatcher()
                 .AddMongo()
@@ -27,7 +30,8 @@ namespace Pacco.Services.Availability.Infrastructure
 
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
         {
-            app.UseConvey();
+            app.UseErrorHandler()
+                .UseConvey();
 
             return app;
         }
