@@ -10,7 +10,7 @@ namespace Pacco.Services.Availability.Core.Entities
     public class Resource : AggregateRoot
     {
         private IReadOnlyCollection<string> _tags = new HashSet<string>();
-        private IReadOnlyCollection<Reservation> _reservations = new HashSet<Reservation>();
+        private ISet<Reservation> _reservations = new HashSet<Reservation>();
 
         public IReadOnlyCollection<string> Tags
         {
@@ -18,7 +18,7 @@ namespace Pacco.Services.Availability.Core.Entities
             private set => _tags = new HashSet<string>(value);
         }
 
-        public IReadOnlyCollection<Reservation> Reservations
+        public IEnumerable<Reservation> Reservations
         {
             get => _reservations;
             private set => _reservations = new HashSet<Reservation>(value);
@@ -56,6 +56,32 @@ namespace Pacco.Services.Availability.Core.Entities
 
             return resource;
 
+        }
+
+        public void AddReservation(Reservation reservation)
+        {
+            var hasCollidingReservation = _reservations.Any(HasTheSameReservationDate);
+            if (hasCollidingReservation)
+            {
+                var collidingReservation = _reservations.First(HasTheSameReservationDate);
+                if(collidingReservation.Priority >= reservation.Priority)
+                {
+                    throw new CannotExpropriateReservationException(Id, reservation.DateTime);
+                }
+
+                if (_reservations.Remove(collidingReservation))
+                {
+                    AddEvent(new ReservationCanceled(this, collidingReservation));
+                }
+
+            }
+
+            if (_reservations.Add(reservation))
+            {
+                AddEvent(new ReservationAdded(this, reservation));
+            }
+
+            bool HasTheSameReservationDate(Reservation r) => r.DateTime.Date == reservation.DateTime.Date;
         }
     }
 }

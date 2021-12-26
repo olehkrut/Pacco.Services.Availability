@@ -12,7 +12,8 @@ namespace Pacco.Services.Availability.Infrastructure.Mongo.Documents
             => new Resource(
                 document.Id,
                 document.Tags,
-                document.Reservations?.Select(r => new Reservation(r.TimeStamp.AsDateTime(), r.Priority)).ToList());
+                document.Reservations?.Select(r => new Reservation(r.TimeStamp.AsDateTime(), r.Priority)).ToList(),
+                document.Version);
 
         public static ResourceDocument AsDocument(this Resource entity)
             => new ResourceDocument
@@ -24,6 +25,7 @@ namespace Pacco.Services.Availability.Infrastructure.Mongo.Documents
                     Priority = r.Priority,
                     TimeStamp = r.DateTime.AsDaysSinceEpoch(),
                 }).ToList(),
+                Version = entity.Version
             };
 
         public static ResourceDto AsDto(this ResourceDocument document)
