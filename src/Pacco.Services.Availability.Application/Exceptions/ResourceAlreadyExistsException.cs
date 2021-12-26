@@ -6,6 +6,9 @@ namespace Pacco.Services.Availability.Application.Exceptions
     {
         public ResourceAlreadyExistsException(Guid id) : base($"Resource with ID: '{id}' already exist")
         {
+            Id = id;
         }
+
+        public Guid Id { get; }
     }
 }

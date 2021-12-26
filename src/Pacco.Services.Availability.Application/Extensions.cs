@@ -1,5 +1,6 @@
 ﻿using Convey;
 using Convey.CQRS.Commands;
+using Convey.CQRS.Events;
 
 namespace Pacco.Services.Availability.Application
 {
@@ -8,6 +9,8 @@ namespace Pacco.Services.Availability.Application
         public static IConveyBuilder AddApplication(this IConveyBuilder builder)
            => builder
                 .AddCommandHandlers()
-                .AddInMemoryCommandDispatcher();
+                .AddInMemoryCommandDispatcher()
+                .AddEventHandlers()
+                .AddInMemoryEventDispatcher();
     }
 }

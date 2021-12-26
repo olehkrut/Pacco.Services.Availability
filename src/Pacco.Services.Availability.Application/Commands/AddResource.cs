@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Pacco.Services.Availability.Application.Commands
 {
+    [Contract]
     public class AddResource : ICommand
     {
         public AddResource(Guid resourceId, IReadOnlyCollection<string> tags)

@@ -3,6 +3,7 @@ using System;
 
 namespace Pacco.Services.Availability.Application.Commands
 {
+    [Contract]
     public class ReserveResource : ICommand
     {
         public ReserveResource(Guid resourceId, DateTime dateTime, int priority)
