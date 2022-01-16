@@ -27,7 +27,9 @@ using Pacco.Services.Availability.Infrastructure.Mongo.Repositories;
 using Pacco.Services.Availability.Infrastructure.Services;
 using Pacco.Services.Availability.Infrastructure.Services.Clients;
 using System;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Pacco.Services.Availability.Tests.EndToEnd")]
 namespace Pacco.Services.Availability.Infrastructure
 {
     public static class Extensions
