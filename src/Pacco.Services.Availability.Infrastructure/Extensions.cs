@@ -30,6 +30,7 @@ using System;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Pacco.Services.Availability.Tests.EndToEnd")]
+[assembly: InternalsVisibleTo("Pacco.Services.Availability.Tests.Integration")]
 namespace Pacco.Services.Availability.Infrastructure
 {
     public static class Extensions
