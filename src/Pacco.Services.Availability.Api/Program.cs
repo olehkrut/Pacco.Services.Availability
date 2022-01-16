@@ -1,8 +1,10 @@
 ﻿using Convey;
+using Convey.Types;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Pacco.Services.Availability.Application;
 using Pacco.Services.Availability.Application.Commands;
@@ -32,6 +34,7 @@ namespace Pacco.Services.Availability.Api
                 .Configure(app => app
                     .UseInfrastructure()
                     .UseDispatcherEndpoints(endpoints => endpoints
+                        .Get("", ctx => ctx.Response.WriteAsync(ctx.RequestServices.GetService<AppOptions>().Name))
                         .Get<GetResource, ResourceDto>("resources/{resourceId}")
                         .Get<GetResources, IEnumerable<ResourceDto>>("resources")
                         .Post<ReserveResource>("resources/{resourceId}/reservations/{dateTime}")

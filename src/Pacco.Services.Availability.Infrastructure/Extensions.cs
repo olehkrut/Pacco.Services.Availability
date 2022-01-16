@@ -4,6 +4,7 @@ using Convey.CQRS.Events;
 using Convey.CQRS.Queries;
 using Convey.Discovery.Consul;
 using Convey.HTTP;
+using Convey.LoadBalancing.Fabio;
 using Convey.MessageBrokers.CQRS;
 using Convey.MessageBrokers.Outbox;
 using Convey.MessageBrokers.Outbox.Mongo;
@@ -51,7 +52,8 @@ namespace Pacco.Services.Availability.Infrastructure
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
                 .AddMessageOutbox(o => o.AddMongo())
                 .AddHttpClient()
-                .AddConsul();
+                .AddConsul()
+                .AddFabio();
 
             return builder;
         }
