@@ -1,4 +1,5 @@
 ﻿using Convey;
+using Convey.Logging;
 using Convey.Types;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
@@ -38,8 +39,9 @@ namespace Pacco.Services.Availability.Api
                         .Get<GetResource, ResourceDto>("resources/{resourceId}")
                         .Get<GetResources, IEnumerable<ResourceDto>>("resources")
                         .Post<ReserveResource>("resources/{resourceId}/reservations/{dateTime}")
-                        .Post<AddResource>("resources", afterDispatch: (cmd, ctx) => 
-                            ctx.Response.Created($"resources/{cmd.ResourceId}"))));
+                        .Post<AddResource>("resources", afterDispatch: (cmd, ctx) =>
+                            ctx.Response.Created($"resources/{cmd.ResourceId}"))))
+                .UseLogging();
 
     }
 }

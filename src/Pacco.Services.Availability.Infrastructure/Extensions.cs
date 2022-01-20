@@ -9,6 +9,7 @@ using Convey.MessageBrokers.CQRS;
 using Convey.MessageBrokers.Outbox;
 using Convey.MessageBrokers.Outbox.Mongo;
 using Convey.MessageBrokers.RabbitMQ;
+using Convey.Metrics.AppMetrics;
 using Convey.Persistence.MongoDB;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
@@ -22,6 +23,7 @@ using Pacco.Services.Availability.Application.Services.Clients;
 using Pacco.Services.Availability.Core.Repositories;
 using Pacco.Services.Availability.Infrastructure.Decorators;
 using Pacco.Services.Availability.Infrastructure.Exceptions;
+using Pacco.Services.Availability.Infrastructure.Metrics;
 using Pacco.Services.Availability.Infrastructure.Mongo.Documents;
 using Pacco.Services.Availability.Infrastructure.Mongo.Repositories;
 using Pacco.Services.Availability.Infrastructure.Services;
@@ -44,6 +46,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
             builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
             builder.Services.AddTransient<ICustomersServiceClient, CustomersServiceClient>();
+            builder.Services.AddHostedService<MetricsJob>();
 
             builder
                 .AddErrorHandler<ExceptionToResponseMapper>()
@@ -56,7 +59,8 @@ namespace Pacco.Services.Availability.Infrastructure
                 .AddMessageOutbox(o => o.AddMongo())
                 .AddHttpClient()
                 .AddConsul()
-                .AddFabio();
+                .AddFabio()
+                .AddMetrics();
 
             return builder;
         }
@@ -65,6 +69,7 @@ namespace Pacco.Services.Availability.Infrastructure
         {
             app.UseErrorHandler()
                 .UseConvey()
+                .UseMetrics()
                 .UsePublicContracts<ContractAttribute>()
                 .UseRabbitMq()
                 .SubscribeCommand<AddResource>()
