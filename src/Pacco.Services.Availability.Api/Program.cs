@@ -38,7 +38,7 @@ namespace Pacco.Services.Availability.Api
                     .UseDispatcherEndpoints(endpoints => endpoints
                         .Get("", ctx => ctx.Response.WriteAsync(ctx.RequestServices.GetService<AppOptions>().Name))
                         .Get<GetResource, ResourceDto>("resources/{resourceId}")
-                        .Get<GetResources, IEnumerable<ResourceDto>>("resources")
+                        .Get<GetResources, IEnumerable<ResourceDto>>("resources", auth: true)
                         .Post<ReserveResource>("resources/{resourceId}/reservations/{dateTime}")
                         .Post<AddResource>("resources", afterDispatch: (cmd, ctx) =>
                             ctx.Response.Created($"resources/{cmd.ResourceId}"))))

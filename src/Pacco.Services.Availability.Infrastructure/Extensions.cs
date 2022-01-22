@@ -1,4 +1,5 @@
 ﻿using Convey;
+using Convey.Auth;
 using Convey.CQRS.Commands;
 using Convey.CQRS.Events;
 using Convey.CQRS.Queries;
@@ -50,7 +51,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
             builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(JaegerCommandHalderDecorator<>));
-            builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(SecurityDecorator<>));
+            //builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(SecurityDecorator<>));
             builder.Services.AddTransient<ICustomersServiceClient, CustomersServiceClient>();
             builder.Services.AddHostedService<MetricsJob>();
 
@@ -69,6 +70,7 @@ namespace Pacco.Services.Availability.Infrastructure
                 .AddMetrics()
                 .AddJaeger()
                 .AddSecurity()
+                .AddJwt()
                 .AddCertificateAuthentication();
 
             return builder;
@@ -80,6 +82,7 @@ namespace Pacco.Services.Availability.Infrastructure
                 .UseConvey()
                 .UseMetrics()
                 .UseJaeger()
+                .UseAuthentication()
                 .UsePublicContracts<ContractAttribute>()
                 .UseCertificateAuthentication()
                 .UseRabbitMq()

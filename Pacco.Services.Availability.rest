@@ -1,8 +1,10 @@
 @url = http://localhost:5001
-@resourceId = 00000000-0000-0000-0000-000000000011
-@customerId = 00000000-0000-0000-0000-000000000000
+@resourceId = 00000000-0000-0000-0000-000000000002
+@customerId = 470d3070-cca7-406f-812f-87423e1f49c5
 @dateTime = 2020-01-10
 @tags = ["vehicle", "armor"]
+
+@accessToken = eyJhbGciOiJSUzI1NiIsImtpZCI6IjdBMTA3NTQ0N0U3MTQ1MTEzNkQ3ODk2MDQzM0RCQTkwRjg2MTYyMjciLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiI2ODZmZTcyN2ZkOGE0NWZmYTAwMTRiYjM2ZTEwY2E0OCIsInVuaXF1ZV9uYW1lIjoiNjg2ZmU3MjdmZDhhNDVmZmEwMDE0YmIzNmUxMGNhNDgiLCJqdGkiOiI4MzdkOWNlMC1mNDdkLTQxMWMtYTIxZC01M2U0ZDVkYWIwOTEiLCJpYXQiOiIxNjQyODYzOTQzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoidXNlciIsIm5iZiI6MTY0Mjg2Mzk0MywiZXhwIjoxNjQyODY3NTQzLCJpc3MiOiJwYWNjbyJ9.nyVS9QVXo7eHlXlWfwQePsQnl4ctOee-h1AiuxIbWAp-7iiu4bE6EPr0SWIwXmlB0XACl5M2dQaoF0sgMy3oqGRCa-4ApipkQZvjnsMRfNyU_trKCeyu3folwd4dFfO_DcoZB-pNYT3XBw-Q8OXJH8xBQrayJKu3dekHTeNDLRy4h7SM13SCSu6VSU32H4UlZFtEdi2evQXtQCk8q-Yr7tUgS4wF4e_Xh6AnBVsEQ7dSWfsTYT91LkTEEOQC52ybhuopo6dE6qA9P6NJMY-CGPyu22ChRPRi6ZI6es_cvV-tUqtK9Qc7D2N3NThLseqLvnOpKduC2Jr-ZnfMW7VJqg
 
 ###
 GET {{url}}/resources?tags={{tags}}&matchAllTags=false
@@ -27,7 +29,7 @@ Content-Type: application/json
   "resourceId": "{{resourceId}}",
   "customerId": "{{customerId}}",
   "dateTime": "{{dateTime}}",
-  "priority": 1
+  "priority": 2
 }
 
 ###
