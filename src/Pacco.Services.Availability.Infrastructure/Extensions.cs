@@ -50,6 +50,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
             builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(JaegerCommandHalderDecorator<>));
+            builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(SecurityDecorator<>));
             builder.Services.AddTransient<ICustomersServiceClient, CustomersServiceClient>();
             builder.Services.AddHostedService<MetricsJob>();
 
