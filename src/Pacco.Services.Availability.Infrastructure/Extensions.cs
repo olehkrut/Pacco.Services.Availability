@@ -54,6 +54,11 @@ namespace Pacco.Services.Availability.Infrastructure
             //builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(SecurityDecorator<>));
             builder.Services.AddTransient<ICustomersServiceClient, CustomersServiceClient>();
             builder.Services.AddHostedService<MetricsJob>();
+            builder.Services.AddAuthorization(o => o.AddPolicy("resources:read",
+                p =>
+                {
+                    p.RequireClaim("permissions", "resources:read");
+                }));
 
             builder
                 .AddErrorHandler<ExceptionToResponseMapper>()
