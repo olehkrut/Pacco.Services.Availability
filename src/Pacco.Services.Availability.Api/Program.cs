@@ -1,5 +1,6 @@
 ﻿using Convey;
 using Convey.Logging;
+using Convey.Secrets.Vault;
 using Convey.Types;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
@@ -41,6 +42,7 @@ namespace Pacco.Services.Availability.Api
                         .Post<ReserveResource>("resources/{resourceId}/reservations/{dateTime}")
                         .Post<AddResource>("resources", afterDispatch: (cmd, ctx) =>
                             ctx.Response.Created($"resources/{cmd.ResourceId}"))))
+                .UseVault()
                 .UseLogging();
 
     }

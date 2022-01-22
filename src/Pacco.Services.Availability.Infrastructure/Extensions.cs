@@ -11,8 +11,12 @@ using Convey.MessageBrokers.Outbox.Mongo;
 using Convey.MessageBrokers.RabbitMQ;
 using Convey.Metrics.AppMetrics;
 using Convey.Persistence.MongoDB;
+using Convey.Security;
+using Convey.Tracing.Jaeger;
+using Convey.Tracing.Jaeger.RabbitMQ;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
+using Convey.WebApi.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pacco.Services.Availability.Application;
@@ -45,6 +49,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.AddTransient<IEventProcessor, EventProcessor>();
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
             builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
+            builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(JaegerCommandHalderDecorator<>));
             builder.Services.AddTransient<ICustomersServiceClient, CustomersServiceClient>();
             builder.Services.AddHostedService<MetricsJob>();
 
@@ -54,13 +59,16 @@ namespace Pacco.Services.Availability.Infrastructure
                 .AddInMemoryQueryDispatcher()
                 .AddMongo()
                 .AddMongoRepository<ResourceDocument, Guid>("resources")
-                .AddRabbitMq()
+                .AddRabbitMq(plugins: plugins => plugins.AddJaegerRabbitMqPlugin())
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
                 .AddMessageOutbox(o => o.AddMongo())
                 .AddHttpClient()
                 .AddConsul()
                 .AddFabio()
-                .AddMetrics();
+                .AddMetrics()
+                .AddJaeger()
+                .AddSecurity()
+                .AddCertificateAuthentication();
 
             return builder;
         }
@@ -70,7 +78,9 @@ namespace Pacco.Services.Availability.Infrastructure
             app.UseErrorHandler()
                 .UseConvey()
                 .UseMetrics()
+                .UseJaeger()
                 .UsePublicContracts<ContractAttribute>()
+                .UseCertificateAuthentication()
                 .UseRabbitMq()
                 .SubscribeCommand<AddResource>()
                 .SubscribeCommand<ReserveResource>()
